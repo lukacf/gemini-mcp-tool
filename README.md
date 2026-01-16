@@ -33,6 +33,17 @@ Before using this tool, ensure you have:
 1. **[Node.js](https://nodejs.org/)** (v16.0.0 or higher)
 2. **[Google Gemini CLI](https://github.com/google-gemini/gemini-cli)** installed and configured
 
+### Environment Variables
+
+- **`GEMINI_API_KEY`** (optional): If set, the tool will use this API key for Gemini requests. If not set, it falls back to the Gemini CLI's default authentication (OAuth or configured credentials).
+
+```bash
+# Set via environment
+export GEMINI_API_KEY="your-api-key-here"
+
+# Or pass directly when adding the MCP server
+claude mcp add gemini-cli -e GEMINI_API_KEY="your-api-key-here" -- npx -y gemini-mcp-tool
+```
 
 ### One-Line Setup
 

@@ -35,6 +35,11 @@ export const MODELS = {
 // Default model
 export const DEFAULT_MODEL = MODELS.FLASH_3_PREVIEW;
 
+// Environment variables
+export const ENV_VARS = {
+  GEMINI_API_KEY: "GEMINI_API_KEY",
+} as const;
+
 // MCP Protocol Constants
 export const PROTOCOL = {
   // Message roles
