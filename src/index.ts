@@ -17,7 +17,7 @@ import {
   CallToolResult,
 } from "@modelcontextprotocol/sdk/types.js";
 import { Logger } from "./utils/logger.js";
-import { PROTOCOL, ToolArguments } from "./constants.js";
+import { PROTOCOL, ToolArguments, ENV_VARS } from "./constants.js";
 
 import { 
   getToolDefinitions, 
@@ -253,6 +253,21 @@ server.setRequestHandler(GetPromptRequestSchema, async (request: GetPromptReques
 // Start the server
 async function main() {
   Logger.debug("init gemini-mcp-tool");
-  const transport = new StdioServerTransport(); await server.connect(transport);
+
+  // Check for GEMINI_API_KEY in environment
+  const apiKey = process.env[ENV_VARS.GEMINI_API_KEY];
+  if (apiKey) {
+    Logger.debug("GEMINI_API_KEY found in environment");
+  } else {
+    Logger.debug("GEMINI_API_KEY not set - using Gemini CLI default authentication");
+  }
+
+  const transport = new StdioServerTransport();
+  await server.connect(transport);
   Logger.debug("gemini-mcp-tool listening on stdio");
-} main().catch((error) => {Logger.error("Fatal error:", error); process.exit(1); }); 
+}
+
+main().catch((error) => {
+  Logger.error("Fatal error:", error);
+  process.exit(1);
+}); 
