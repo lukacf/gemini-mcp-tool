@@ -28,10 +28,13 @@ export const askGeminiTool: UnifiedTool = {
     const { prompt, model, sandbox, changeMode, chunkIndex, chunkCacheKey } = args;
     if (!prompt?.trim()) { throw new Error(ERROR_MESSAGES.NO_PROMPT_PROVIDED); }
 
-    if (changeMode && chunkIndex && chunkCacheKey) {
+    // Convert chunkIndex to number if it's a string
+    const normalizedChunkIndex = chunkIndex !== undefined ? Number(chunkIndex) : undefined;
+
+    if (changeMode && normalizedChunkIndex && chunkCacheKey) {
       return processChangeModeOutput(
         '', // empty for cache...
-        chunkIndex as number,
+        normalizedChunkIndex,
         chunkCacheKey as string,
         prompt as string
       );
@@ -48,7 +51,7 @@ export const askGeminiTool: UnifiedTool = {
     if (changeMode) {
       return processChangeModeOutput(
         output,
-        args.chunkIndex as number | undefined,
+        normalizedChunkIndex,
         undefined,
         prompt as string
       );
