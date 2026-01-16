@@ -1,10 +1,11 @@
 import { executeCommand } from './commandExecutor.js';
 import { Logger } from './logger.js';
-import { 
-  ERROR_MESSAGES, 
-  STATUS_MESSAGES, 
-  MODELS, 
-  CLI
+import {
+  ERROR_MESSAGES,
+  STATUS_MESSAGES,
+  MODELS,
+  CLI,
+  DEFAULT_MODEL
 } from '../constants.js';
 
 import { parseChangeModeOutput, validateChangeModeEdits } from './changeModeParser.js';
@@ -12,13 +13,20 @@ import { formatChangeModeResponse, summarizeChangeModeEdits } from './changeMode
 import { chunkChangeModeEdits } from './changeModeChunker.js';
 import { cacheChunks, getChunks } from './chunkCache.js';
 
+export interface GeminiResult {
+  output: string;
+  modelUsed: string;
+}
+
 export async function executeGeminiCLI(
   prompt: string,
   model?: string,
   sandbox?: boolean,
   changeMode?: boolean,
   onProgress?: (newOutput: string) => void
-): Promise<string> {
+): Promise<GeminiResult> {
+  // Use provided model or fall back to default
+  const effectiveModel = model || DEFAULT_MODEL;
   let prompt_processed = prompt;
   
   if (changeMode) {
@@ -88,7 +96,7 @@ ${prompt_processed}
   }
   
   const args = [];
-  if (model) { args.push(CLI.FLAGS.MODEL, model); }
+  args.push(CLI.FLAGS.MODEL, effectiveModel);
   if (sandbox) { args.push(CLI.FLAGS.SANDBOX); }
   
   // Ensure @ symbols work cross-platform by wrapping in quotes if needed
@@ -99,10 +107,11 @@ ${prompt_processed}
   args.push(CLI.FLAGS.PROMPT, finalPrompt);
   
   try {
-    return await executeCommand(CLI.COMMANDS.GEMINI, args, onProgress);
+    const output = await executeCommand(CLI.COMMANDS.GEMINI, args, onProgress);
+    return { output, modelUsed: effectiveModel };
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    if (errorMessage.includes(ERROR_MESSAGES.QUOTA_EXCEEDED) && model !== MODELS.FLASH) {
+    if (errorMessage.includes(ERROR_MESSAGES.QUOTA_EXCEEDED) && effectiveModel !== MODELS.FLASH) {
       Logger.warn(`${ERROR_MESSAGES.QUOTA_EXCEEDED}. Falling back to ${MODELS.FLASH}.`);
       await sendStatusMessage(STATUS_MESSAGES.FLASH_RETRY);
       const fallbackArgs = [];
@@ -110,21 +119,21 @@ ${prompt_processed}
       if (sandbox) {
         fallbackArgs.push(CLI.FLAGS.SANDBOX);
       }
-      
+
       // Same @ symbol handling for fallback
-      const fallbackPrompt = prompt_processed.includes('@') && !prompt_processed.startsWith('"') 
-        ? `"${prompt_processed}"` 
+      const fallbackPrompt = prompt_processed.includes('@') && !prompt_processed.startsWith('"')
+        ? `"${prompt_processed}"`
         : prompt_processed;
-        
+
       fallbackArgs.push(CLI.FLAGS.PROMPT, fallbackPrompt);
       try {
-        const result = await executeCommand(CLI.COMMANDS.GEMINI, fallbackArgs, onProgress);
+        const output = await executeCommand(CLI.COMMANDS.GEMINI, fallbackArgs, onProgress);
         Logger.warn(`Successfully executed with ${MODELS.FLASH} fallback.`);
         await sendStatusMessage(STATUS_MESSAGES.FLASH_SUCCESS);
-        return result;
+        return { output, modelUsed: MODELS.FLASH };
       } catch (fallbackError) {
         const fallbackErrorMessage = fallbackError instanceof Error ? fallbackError.message : String(fallbackError);
-        throw new Error(`${MODELS.PRO} quota exceeded, ${MODELS.FLASH} fallback also failed: ${fallbackErrorMessage}`);
+        throw new Error(`${effectiveModel} quota exceeded, ${MODELS.FLASH} fallback also failed: ${fallbackErrorMessage}`);
       }
     } else {
       throw error;

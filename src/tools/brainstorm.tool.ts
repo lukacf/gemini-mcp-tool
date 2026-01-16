@@ -117,7 +117,7 @@ ${domain ? `Given the ${domain} domain, I'll apply the most effective combinatio
 
 const brainstormArgsSchema = z.object({
   prompt: z.string().min(1).describe("Primary brainstorming challenge or question to explore"),
-  model: z.string().optional().describe("Optional model to use (e.g., 'gemini-2.5-flash'). If not specified, uses the default model (gemini-2.5-pro)."),
+  model: z.string().optional().describe("Optional model to use (e.g., 'gemini-2.5-flash', 'gemini-3-flash-preview', 'gemini-3-flash-pro'). If not specified, uses the default model (gemini-3-flash-preview)."),
   methodology: z.enum(['divergent', 'convergent', 'scamper', 'design-thinking', 'lateral', 'auto']).default('auto').describe("Brainstorming framework: 'divergent' (generate many ideas), 'convergent' (refine existing), 'scamper' (systematic triggers), 'design-thinking' (human-centered), 'lateral' (unexpected connections), 'auto' (AI selects best)"),
   domain: z.string().optional().describe("Domain context for specialized brainstorming (e.g., 'software', 'business', 'creative', 'research', 'product', 'marketing')"),
   constraints: z.string().optional().describe("Known limitations, requirements, or boundaries (budget, time, technical, legal, etc.)"),
@@ -161,11 +161,12 @@ export const brainstormTool: UnifiedTool = {
     });
 
     Logger.debug(`Brainstorm: Using methodology '${methodology}' for domain '${domain || 'general'}'`);
-    
+
     // Report progress to user
     onProgress?.(`Generating ${ideaCount} ideas via ${methodology} methodology...`);
-    
+
     // Execute with Gemini
-    return await executeGeminiCLI(enhancedPrompt, model as string | undefined, false, false, onProgress);
+    const { output, modelUsed } = await executeGeminiCLI(enhancedPrompt, model as string | undefined, false, false, onProgress);
+    return `[Model: ${modelUsed}]\n${output}`;
   }
 };
