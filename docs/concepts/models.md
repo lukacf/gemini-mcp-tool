@@ -4,6 +4,16 @@ Choose the right Gemini model for your task.
 
 ## Available Models
 
+### Gemini-3-flash-preview (Default)
+- **Best for**: General-purpose tasks, balanced performance
+- **Context**: Large context window
+- **Use when**: Default choice for most tasks, good balance of speed and capability
+
+### Gemini-3-flash-pro
+- **Best for**: Complex reasoning, advanced analysis
+- **Context**: Large context window
+- **Use when**: Tasks requiring deeper reasoning and more sophisticated responses
+
 ### Gemini-2.5-pro
 - **Best for**: Complex analysis, large codebases
 - **Context**: 2M tokens
@@ -11,7 +21,7 @@ Choose the right Gemini model for your task.
 
 ### Gemini-2.5-flash
 - **Best for**: Quick responses, routine tasks
-- **Context**: 1M tokens  
+- **Context**: 1M tokens
 - **Use when**: Fast code reviews, Analyzing entire projects, simple explanations
 
 ## Setting Models
@@ -45,14 +55,16 @@ You can also append with '-m' or ask specifically with
 
 | Model | Speed | Context | Best Use Case |
 |-------|-------|---------|---------------|
-| Pro | Slower | 2M tokens | big ideas |
-| Flash | Fast | 1M tokens | quick, specific changes |
+| gemini-3-flash-preview | Fast | Large | Default, general tasks |
+| gemini-3-flash-pro | Moderate | Large | Complex reasoning |
+| gemini-2.5-pro | Slower | 2M tokens | Big ideas, architecture |
+| gemini-2.5-flash | Fast | 1M tokens | Quick, specific changes |
 
 ## Cost Optimization
 
-1. **Start with Flash** for most tasks
-2. **Use Pro** only when you need the full context
-3. **Flash-8B** for simple, repetitive tasks
+1. **Start with gemini-3-flash-preview** (default) for most tasks
+2. **Use gemini-3-flash-pro** for complex reasoning
+3. **Use gemini-2.5-pro** when you need the full 2M context
 
 ## Token Limits
 
@@ -62,8 +74,8 @@ You can also append with '-m' or ask specifically with
 
 ## Recommendations
 
-- **Code Review**: Flash
-- **Architecture Analysis**: Pro
-- **Quick Fixes**: Flash-8B
-- **Documentation**: Flash
-- **Security Audit**: Pro
+- **Code Review**: gemini-3-flash-preview (default)
+- **Architecture Analysis**: gemini-3-flash-pro or gemini-2.5-pro
+- **Quick Fixes**: gemini-3-flash-preview
+- **Documentation**: gemini-3-flash-preview
+- **Security Audit**: gemini-3-flash-pro or gemini-2.5-pro
