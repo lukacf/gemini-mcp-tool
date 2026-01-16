@@ -29,7 +29,7 @@ export const MODELS = {
   PRO: "gemini-2.5-pro",
   FLASH: "gemini-2.5-flash",
   FLASH_3_PREVIEW: "gemini-3-flash-preview",
-  FLASH_3_PRO: "gemini-3-flash-pro",
+  PRO_3_PREVIEW: "gemini-3-pro-preview",
 } as const;
 
 // Default model

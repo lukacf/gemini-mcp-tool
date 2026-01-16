@@ -9,7 +9,7 @@ import {
 
 const askGeminiArgsSchema = z.object({
   prompt: z.string().min(1).describe("Analysis request. Use @ syntax to include files (e.g., '@largefile.js explain what this does') or ask general questions"),
-  model: z.string().optional().describe("Optional model to use (e.g., 'gemini-2.5-flash', 'gemini-3-flash-preview', 'gemini-3-flash-pro'). If not specified, uses the default model (gemini-3-flash-preview)."),
+  model: z.string().optional().describe("Optional model to use (e.g., 'gemini-2.5-flash', 'gemini-3-flash-preview', 'gemini-3-pro-preview'). If not specified, uses the default model (gemini-3-flash-preview)."),
   sandbox: z.boolean().default(false).describe("Use sandbox mode (-s flag) to safely test code changes, execute scripts, or run potentially risky operations in an isolated environment"),
   changeMode: z.boolean().default(false).describe("Enable structured change mode - formats prompts to prevent tool errors and returns structured edit suggestions that Claude can apply directly"),
   chunkIndex: z.union([z.number(), z.string()]).optional().describe("Which chunk to return (1-based)"),
