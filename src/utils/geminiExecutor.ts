@@ -97,6 +97,7 @@ ${prompt_processed}
   
   const args = [];
   args.push(CLI.FLAGS.MODEL, effectiveModel);
+  args.push(CLI.FLAGS.YOLO);
   if (sandbox) { args.push(CLI.FLAGS.SANDBOX); }
   
   // Ensure @ symbols work cross-platform by wrapping in quotes if needed
@@ -116,6 +117,7 @@ ${prompt_processed}
       await sendStatusMessage(STATUS_MESSAGES.FLASH_RETRY);
       const fallbackArgs = [];
       fallbackArgs.push(CLI.FLAGS.MODEL, MODELS.FLASH);
+      fallbackArgs.push(CLI.FLAGS.YOLO);
       if (sandbox) {
         fallbackArgs.push(CLI.FLAGS.SANDBOX);
       }
