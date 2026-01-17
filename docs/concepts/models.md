@@ -9,7 +9,7 @@ Choose the right Gemini model for your task.
 - **Context**: Large context window
 - **Use when**: Default choice for most tasks, good balance of speed and capability
 
-### Gemini-3-flash-pro
+### Gemini-3-pro-preview
 - **Best for**: Complex reasoning, advanced analysis
 - **Context**: Large context window
 - **Use when**: Tasks requiring deeper reasoning and more sophisticated responses
@@ -56,14 +56,14 @@ You can also append with '-m' or ask specifically with
 | Model | Speed | Context | Best Use Case |
 |-------|-------|---------|---------------|
 | gemini-3-flash-preview | Fast | Large | Default, general tasks |
-| gemini-3-flash-pro | Moderate | Large | Complex reasoning |
+| gemini-3-pro-preview | Moderate | Large | Complex reasoning |
 | gemini-2.5-pro | Slower | 2M tokens | Big ideas, architecture |
 | gemini-2.5-flash | Fast | 1M tokens | Quick, specific changes |
 
 ## Cost Optimization
 
 1. **Start with gemini-3-flash-preview** (default) for most tasks
-2. **Use gemini-3-flash-pro** for complex reasoning
+2. **Use gemini-3-pro-preview** for complex reasoning
 3. **Use gemini-2.5-pro** when you need the full 2M context
 
 ## Token Limits
@@ -75,7 +75,7 @@ You can also append with '-m' or ask specifically with
 ## Recommendations
 
 - **Code Review**: gemini-3-flash-preview (default)
-- **Architecture Analysis**: gemini-3-flash-pro or gemini-2.5-pro
+- **Architecture Analysis**: gemini-3-pro-preview or gemini-2.5-pro
 - **Quick Fixes**: gemini-3-flash-preview
 - **Documentation**: gemini-3-flash-preview
-- **Security Audit**: gemini-3-flash-pro or gemini-2.5-pro
+- **Security Audit**: gemini-3-pro-preview or gemini-2.5-pro
